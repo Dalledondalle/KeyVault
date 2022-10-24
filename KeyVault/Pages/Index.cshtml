@@ -4,7 +4,37 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+}
+else
+{
+    <h1>
+        @Model.ID
+    </h1>
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Password</th>            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.Keys)
+        {
+            <tr>
+                <td>
+                    @item.Username
+                </td>
+                <td>
+                    @item.Password
+                </td>                
+            </tr>
+        }
+    </tbody>
+</table>
+}
