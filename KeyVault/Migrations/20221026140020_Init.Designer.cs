@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KeyVault.Migrations
 {
     [DbContext(typeof(KeyVaultContext))]
-    [Migration("20221024113130_FirstAndLastNameAdded")]
-    partial class FirstAndLastNameAdded
+    [Migration("20221026140020_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,49 @@ namespace KeyVault.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("KeyVault.Areas.Identity.Data.KeyVaultKey", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("KeyVaultKeys");
+                });
+
+            modelBuilder.Entity("KeyVault.Areas.Identity.Data.KeyVaultKeyUser", b =>
+                {
+                    b.Property<string>("KeyVaultUserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("KeyVaultKeyId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("KeyVaultUserId", "KeyVaultKeyId");
+
+                    b.HasIndex("KeyVaultKeyId");
+
+                    b.ToTable("KeyVaultKeyUser");
+                });
 
             modelBuilder.Entity("KeyVault.Areas.Identity.Data.KeyVaultUser", b =>
                 {
@@ -227,6 +270,36 @@ namespace KeyVault.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("KeyVault.Areas.Identity.Data.KeyVaultKey", b =>
+                {
+                    b.HasOne("KeyVault.Areas.Identity.Data.KeyVaultUser", "Owner")
+                        .WithMany("KeyVaultKeys")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("KeyVault.Areas.Identity.Data.KeyVaultKeyUser", b =>
+                {
+                    b.HasOne("KeyVault.Areas.Identity.Data.KeyVaultKey", "KeyVaultKey")
+                        .WithMany("AccesiblesUsers")
+                        .HasForeignKey("KeyVaultKeyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KeyVault.Areas.Identity.Data.KeyVaultUser", "KeyVaultUser")
+                        .WithMany("AccessibleKeys")
+                        .HasForeignKey("KeyVaultUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KeyVaultKey");
+
+                    b.Navigation("KeyVaultUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -276,6 +349,18 @@ namespace KeyVault.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("KeyVault.Areas.Identity.Data.KeyVaultKey", b =>
+                {
+                    b.Navigation("AccesiblesUsers");
+                });
+
+            modelBuilder.Entity("KeyVault.Areas.Identity.Data.KeyVaultUser", b =>
+                {
+                    b.Navigation("AccessibleKeys");
+
+                    b.Navigation("KeyVaultKeys");
                 });
 #pragma warning restore 612, 618
         }

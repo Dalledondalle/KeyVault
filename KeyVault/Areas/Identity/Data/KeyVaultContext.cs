@@ -15,6 +15,15 @@ public class KeyVaultContext : IdentityDbContext<KeyVaultUser>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<KeyVaultUser>().HasMany(x => x.KeyVaultKeys).WithOne(x => x.Owner);
+
+        builder.Entity<KeyVaultKeyUser>().HasKey(x => new {x.KeyVaultUserId, x.KeyVaultKeyId});
+
+        builder.Entity<KeyVaultKeyUser>().HasOne(x => x.KeyVaultUser).WithMany(x => x.AccessibleKeys).HasForeignKey(x => x.KeyVaultUserId);
+
+        builder.Entity<KeyVaultKeyUser>().HasOne(x => x.KeyVaultKey).WithMany(x => x.AccesiblesUsers).HasForeignKey(x => x.KeyVaultKeyId);
+
+
         base.OnModelCreating(builder);
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.
@@ -22,6 +31,10 @@ public class KeyVaultContext : IdentityDbContext<KeyVaultUser>
 
         builder.ApplyConfiguration(new KeyVaultUserEntityConfiguration());
     }
+
+    public DbSet<KeyVaultKey> KeyVaultKeys { get; set; }
+    public DbSet<KeyVaultUser> KeyVaultUsers { get; set; }
+    public DbSet<KeyVaultKeyUser> KeyVaultKeyUser { get; set; }
 }
 
 public class KeyVaultUserEntityConfiguration : IEntityTypeConfiguration<KeyVaultUser>

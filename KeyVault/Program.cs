@@ -4,7 +4,7 @@ using KeyVault.Data;
 using KeyVault.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("KeyVaultContextConnection") ?? throw new InvalidOperationException("Connection string 'KeyVaultContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("KeyVaultConnection") ?? throw new InvalidOperationException("Connection string 'KeyVaultConnection' not found.");
 
 //Instanciate the service for the Identity and MySql
 builder.Services.AddDbContext<KeyVaultContext>(options =>

@@ -1,0 +1,37 @@
+﻿@page
+@model KeyVault.Pages.Keys.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>KeyVaultKey</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.KeyVaultKey.Username)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.KeyVaultKey.Username)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.KeyVaultKey.Password)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.KeyVaultKey.Password)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.KeyVaultKey.URL)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.KeyVaultKey.URL)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.KeyVaultKey?.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
