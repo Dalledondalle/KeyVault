@@ -22,34 +22,42 @@
             <th>
                 @Html.DisplayNameFor(model => model.KeyVaultKey[0].URL)
             </th>
-@*            <th>
+            <th>
                 @Html.DisplayNameFor(model => model.KeyVaultKey[0].Owner)
-            </th>*@
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.KeyVaultKey) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.URL)
-            </td>
-@*            <td>
-                @Html.DisplayFor(modelItem => item.Owner)
-            </td>*@
-            <td>
-                <a asp-page="./ManageAccess" asp-route-id="@item.Id">Grant Access</a> |
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.KeyVaultKey)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.URL)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Owner.Email)
+                </td>
+                <td>
+                    <a asp-page="./ManageAccess" asp-route-id="@item.Id">Grant Access</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    @if (item.Owner.NormalizedEmail == User.Identity.Name.ToUpper())
+                    {
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-page="./Remove" asp-route-id="@item.Id">Remove</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

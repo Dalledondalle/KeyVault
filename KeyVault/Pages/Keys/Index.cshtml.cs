@@ -25,7 +25,9 @@ namespace KeyVault.Pages.Keys
         {
             if (_context.KeyVaultKeys != null)
             {
-                KeyVaultKey = await _context.KeyVaultKeys.Include(x => x.Owner).ToListAsync();
+                var id = _context.Users.FirstOrDefault(x => x.NormalizedEmail == User.Identity.Name.ToUpper())?.Id;
+                //KeyVaultKey = await _context.KeyVaultKeys.Include(x => x.Owner).Include(x => x.AccesiblesUsers).ToListAsync();
+                KeyVaultKey = await _context.KeyVaultKeys.Include(x => x.Owner).Include(x => x.AccesiblesUsers).Where(x => x.Owner.Id == id || x.AccesiblesUsers.Any(y => y.KeyVaultUserId == id)).ToListAsync();
             }
             foreach (var key in KeyVaultKey)
             {

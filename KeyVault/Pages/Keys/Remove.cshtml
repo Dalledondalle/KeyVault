@@ -1,0 +1,40 @@
+﻿@page
+@model KeyVault.Pages.Keys.RemoveModel
+
+@{
+    ViewData["Title"] = "Remove";
+}
+
+<h1>Remove</h1>
+
+<h3>Are you sure you want to remove access to this?</h3>
+<div>
+    <h4>KeyVaultKey</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.KeyVaultKey.Username)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.KeyVaultKey.Username)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.KeyVaultKey.Password)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.KeyVaultKey.Password)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.KeyVaultKey.URL)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.KeyVaultKey.URL)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="KeyVaultKey.Id" />
+        <input type="submit" value="Remove Access" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

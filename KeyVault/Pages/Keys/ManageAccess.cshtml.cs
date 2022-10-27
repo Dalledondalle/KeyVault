@@ -46,7 +46,7 @@ namespace KeyVault.Pages.Keys
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            KeyVaultKey = _context.KeyVaultKeys.Include(x => x.Owner).FirstOrDefault();
+            KeyVaultKey = _context.KeyVaultKeys.Include(x => x.Owner).Include(x => x.AccesiblesUsers).Where(x => x.Id == KeyVaultKey.Id).FirstOrDefault();
             var newUser = _context.KeyVaultUsers.Where(x => x.NormalizedEmail == KeyUser.Email.ToUpper()).FirstOrDefault();
             if (newUser is null)
             {
