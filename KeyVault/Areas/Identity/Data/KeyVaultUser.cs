@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using KeyVault.Data;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace KeyVault.Areas.Identity.Data;
 
@@ -25,6 +28,78 @@ public class KeyVaultKey
     public string URL { get; set; }
     public KeyVaultUser Owner { get; set; }
     public ICollection<KeyVaultKeyUser> AccesiblesUsers { get; set; }
+
+
+    private string encrypt(string s)
+    {
+        byte[] iv = new byte[16];
+        byte[] array;
+
+        using (Aes a = Aes.Create())
+        {
+            a.Key = Encoding.UTF8.GetBytes(TrimStringForKey(Owner.Id));
+            a.IV = iv;
+            ICryptoTransform encryptor = a.CreateEncryptor(a.Key, a.IV);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (CryptoStream cryptoStream = new CryptoStream((Stream)stream, encryptor, CryptoStreamMode.Write))
+                {
+                    using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
+                    {
+                        streamWriter.Write(s);
+                    }
+
+                    array = stream.ToArray();
+                }
+            }
+        }
+        return Convert.ToBase64String(array);
+    }
+
+    private string decrypt(string s)
+    {
+        byte[] iv = new byte[16];
+        byte[] buffer = Convert.FromBase64String(s);
+
+        using (Aes a = Aes.Create())
+        {
+            a.Key = Encoding.UTF8.GetBytes(TrimStringForKey(Owner.Id));
+            a.IV = iv;
+            ICryptoTransform decryptor = a.CreateDecryptor(a.Key, a.IV);
+
+            using (MemoryStream stream = new MemoryStream(buffer))
+            {
+                using (CryptoStream cryptoStream = new CryptoStream((Stream)stream, decryptor, CryptoStreamMode.Read))
+                {
+                    using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
+                    {
+                        return streamReader.ReadToEnd();
+                    }
+                }
+            }
+        }
+    }
+
+    public void Encrypt()
+    {
+        if (Owner is null || string.IsNullOrEmpty(Owner.Id)) return;
+        Password = encrypt(Password);
+        Username = encrypt(Username);
+        
+    }
+
+    public void Decrypt()
+    {
+        if (Owner is null || string.IsNullOrEmpty(Owner.Id)) return;
+        Password = decrypt(Password);
+        Username = decrypt(Username);        
+    }
+
+    private static string TrimStringForKey(string s)
+    {
+        Regex r = new Regex("(?:[^a-zA-Z0-9 ]|(?<=['\"])s)",RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        return r.Replace(s, string.Empty);
+    }
 }
 
 public class KeyVaultKeyUser

@@ -39,6 +39,8 @@ namespace KeyVault.Pages.Keys
             KeyVaultKey.Owner = UserManager.Users.Where(x => x.NormalizedEmail == User.Identity.Name.ToUpper()).First();
             KeyVaultKey.Id = Guid.NewGuid().ToString();
 
+            KeyVaultKey.Encrypt();
+
             _context.KeyVaultKeys.Add(KeyVaultKey);
             await _context.SaveChangesAsync();
 

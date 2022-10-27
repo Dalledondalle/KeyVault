@@ -25,7 +25,11 @@ namespace KeyVault.Pages.Keys
         {
             if (_context.KeyVaultKeys != null)
             {
-                KeyVaultKey = await _context.KeyVaultKeys.ToListAsync();
+                KeyVaultKey = await _context.KeyVaultKeys.Include(x => x.Owner).ToListAsync();
+            }
+            foreach (var key in KeyVaultKey)
+            {
+                key.Decrypt();
             }
         }
     }
