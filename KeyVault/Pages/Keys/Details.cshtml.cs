@@ -28,13 +28,14 @@ namespace KeyVault.Pages.Keys
                 return NotFound();
             }
 
-            var keyvaultkey = await _context.KeyVaultKeys.FirstOrDefaultAsync(m => m.Id == id);
+            var keyvaultkey = await _context.KeyVaultKeys.Include(x => x.Owner).FirstOrDefaultAsync(m => m.Id == id);
             if (keyvaultkey == null)
             {
                 return NotFound();
             }
             else 
             {
+                keyvaultkey.Decrypt();
                 KeyVaultKey = keyvaultkey;
             }
             return Page();

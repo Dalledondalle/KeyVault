@@ -33,11 +33,12 @@ namespace KeyVault.Pages.Keys
                 return NotFound();
             }
 
-            var keyvaultkey =  await _context.KeyVaultKeys.FirstOrDefaultAsync(m => m.Id == id);
+            var keyvaultkey =  await _context.KeyVaultKeys.Include(x => x.Owner).FirstOrDefaultAsync(m => m.Id == id);
             if (keyvaultkey == null)
             {
                 return NotFound();
             }
+            keyvaultkey.Decrypt();
             KeyVaultKey = keyvaultkey;
             return Page();
         }
@@ -46,12 +47,14 @@ namespace KeyVault.Pages.Keys
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            var keyvaultkey = await _context.KeyVaultKeys.Include(x => x.Owner).Include(x => x.AccesiblesUsers).FirstOrDefaultAsync(m => m.Id == KeyVaultKey.Id);
 
-            _context.Attach(KeyVaultKey).State = EntityState.Modified;
+            keyvaultkey.Password = KeyVaultKey.Password;
+            keyvaultkey.Username = KeyVaultKey.Username;
+            keyvaultkey.URL = KeyVaultKey.URL;
+            keyvaultkey.Encrypt();
+
+            _context.Attach(keyvaultkey).State = EntityState.Modified;
 
             try
             {
