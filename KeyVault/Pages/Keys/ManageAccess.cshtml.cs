@@ -27,7 +27,7 @@ namespace KeyVault.Pages.Keys
                 return NotFound();
             }
 
-            var keyvaultkey = _context.KeyVaultKeys.Include(x => x.Owner).FirstOrDefault();
+            var keyvaultkey = await _context.KeyVaultKeys.Include(x => x.Owner).FirstOrDefaultAsync();
             if (keyvaultkey == null)
             {
                 return NotFound();

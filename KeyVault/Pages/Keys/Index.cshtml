@@ -1,4 +1,5 @@
 ﻿@page
+@using System.Text.RegularExpressions
 @model KeyVault.Pages.Keys.IndexModel
 
 @{
@@ -36,7 +37,8 @@
                     @Html.DisplayFor(modelItem => item.Username)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Password)
+                    @*@Html.DisplayFor(modelItem => item.Password)     *@
+                    @(new string('*', item.Password.Length))
                     <button class="btn btn-default" onclick="copyToClipboard('@item.Password')">Copy</button>
                 </td>
                 <td>
