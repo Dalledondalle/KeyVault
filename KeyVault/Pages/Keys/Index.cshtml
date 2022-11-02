@@ -37,6 +37,7 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Password)
+                    <button class="btn btn-default" onclick="copyToClipboard('@item.Password')">Copy</button>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.URL)
@@ -61,3 +62,22 @@
         }
     </tbody>
 </table>
+
+@section Scripts
+{
+<script type="text/javascript">
+
+        function copyToClipboard(message) {
+             var msg = message;
+             navigator.clipboard.writeText(msg).then(
+      () => {
+         alert('Password Copied')
+      },
+      (error) => {
+        alert('Copy failed. Error: ' + error)
+      }
+    );
+        }
+
+</script>
+}
