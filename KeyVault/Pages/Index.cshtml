@@ -13,28 +13,19 @@
 }
 else
 {
-    <h1>
-        @Model.ID
-    </h1>
-    @*<table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Password</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Keys)
-            {
-                <tr>
-                    <td>
-                        @item.Username
-                    </td>
-                    <td>
-                        @item.Password
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>*@
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <h1>
+            Welcome @Model.KeyVaultUser.FirstName @Model.KeyVaultUser.LastName
+        </h1>
+    </div>
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <b />
+        <p>
+            To see your logins
+        </p>
+        <b />
+        <button type="button" class="btn btn-primary">
+            <a class="nav-link text-dark" asp-area="" asp-page="Keys/Index">Click Here</a>
+        </button>
+    </div>
 }

@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using KeyVault.Areas.Identity.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace KeyVault.Pages
 {
     public class IndexModel : PageModel
     {
         UserManager<KeyVaultUser> UserManager { get; set; }
-        public string ID { get; set; }
+        public KeyVaultUser KeyVaultUser { get; set; }
         
         private readonly ILogger<IndexModel> _logger;
 
@@ -21,10 +22,10 @@ namespace KeyVault.Pages
             UserManager = userManager;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         { 
-            if(User.Identity.IsAuthenticated)
-                ID = UserManager.Users.Where(x => x.Email == User.Identity.Name).FirstOrDefault().Id;
+            if(UserManager is not null && User.Identity.IsAuthenticated)
+                KeyVaultUser = await UserManager.Users.Where(x => x.Email == User.Identity.Name).FirstOrDefaultAsync();
         }
     }
 }
