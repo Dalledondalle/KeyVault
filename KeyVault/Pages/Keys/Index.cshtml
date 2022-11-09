@@ -51,8 +51,8 @@
                     @if (item.Owner.NormalizedEmail == User.Identity.Name.ToUpper())
                     {
                         <a asp-page="./ManageAccess" asp-route-id="@item.Id">Grant Access |</a> 
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit |</a>
                     }
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
                     @if (item.Owner.NormalizedEmail == User.Identity.Name.ToUpper())
                     {
