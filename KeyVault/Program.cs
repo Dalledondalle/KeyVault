@@ -21,8 +21,12 @@ builder.Services.AddRazorPages();
 
 //To make it accesible externally. Should be in config file or something like that, but for this project, IP is just hardcoded
 var app = builder.Build();
-//app.Urls.Add("http://62.141.38.222:9500");
-//app.Urls.Add("http://localhost:9500");
+
+if(!System.Diagnostics.Debugger.IsAttached)
+{
+    app.Urls.Add("http://62.141.38.222:9500");
+    app.Urls.Add("http://localhost:9500");
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
