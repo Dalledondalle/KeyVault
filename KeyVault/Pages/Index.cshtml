@@ -7,8 +7,17 @@
 @if (!User.Identity.IsAuthenticated)
 {
     <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <h1 class="display-4">Welcome to Dalles KeyVault</h1>
+    </div>
+    <div class="text-center">
+        <h2 class="display-8">
+            If you already have an account, follow this <a id="login" asp-area="Identity" asp-page="/Account/Login">link - Login</a>
+        </h2>
+    </div>
+    <div class="text-center">
+        <h2 class="display-8">
+            Otherwise follow this link to create a new account <a id="register" asp-area="Identity" asp-page="/Account/Register">link - Make New Account</a>
+        </h2>
     </div>
 }
 else

@@ -23,6 +23,7 @@ namespace KeyVault.Pages.Keys
 
         public async Task OnGetAsync()
         {
+            var name = User.Identity.Name;
             if (_context.KeyVaultKeys != null)
             {
                 var id = _context.Users.FirstOrDefault(x => x.NormalizedEmail == User.Identity.Name.ToUpper())?.Id;
